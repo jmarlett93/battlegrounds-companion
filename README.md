@@ -2,69 +2,87 @@
 
 Native Linux Battlegrounds overlay for Omarchy/Hyprland. Reads Hearthstone `Power.log` from a Proton Battlenet prefix, shows a GTK4 layer-shell tier browser (current tavern pool, filtered by lobby tribes when known), and stores combat telemetry in SQLite.
 
-## Run on Omarchy (desktop test)
+## Install on Omarchy (agent / other machine)
 
-No Flatpak/AppImage packaging — this is a normal GTK4 binary. Build once, put it on your `PATH`, launch it next to Hearthstone.
+Runtime needs system GTK (normal for Arch). Pick **one** path.
 
-### 1. System packages
+### A — Prebuilt (fastest)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/jmarlett93/battlegrounds-companion/fix/current-pool-and-omarchy-install/contrib/install-omarchy.sh | bash
+```
+
+Or manually:
+
+```bash
+sudo pacman -S --needed gtk4 gtk4-layer-shell
+curl -fsSL -o ~/.local/bin/bgc \
+  https://github.com/jmarlett93/battlegrounds-companion/releases/latest/download/bgc
+chmod +x ~/.local/bin/bgc
+```
+
+Ensure `~/.local/bin` is on `PATH`, then:
+
+```bash
+bgc --demo    # smoke test without Hearthstone
+bgc           # live overlay next to the game
+```
+
+### B — AUR-style PKGBUILD (local makepkg)
+
+Uses the same GitHub Release binary; declares pacman deps.
+
+```bash
+git clone https://github.com/jmarlett93/battlegrounds-companion.git
+cd battlegrounds-companion
+git checkout fix/current-pool-and-omarchy-install   # or master once merged
+cd contrib/aur
+makepkg -si
+bgc --demo
+```
+
+### C — Build from source
 
 ```bash
 sudo pacman -S --needed rust gtk4 gtk4-layer-shell base-devel
 source "$HOME/.cargo/env"
-```
-
-### 2. Clone, build, install
-
-```bash
-git clone git@github.com:jmarlett93/battlegrounds-companion.git
+git clone https://github.com/jmarlett93/battlegrounds-companion.git
 cd battlegrounds-companion
-git checkout fix/current-pool-and-omarchy-install   # or master once merged
-
+git checkout fix/current-pool-and-omarchy-install
 cargo build --release -p bgc-app
 install -Dm755 target/release/bgc ~/.local/bin/bgc
 ```
 
-Ensure `~/.local/bin` is on your `PATH` (Omarchy/user shells usually already do).
-
-Optional app-menu launcher:
-
-```bash
-install -Dm644 contrib/bgc.desktop ~/.local/share/applications/bgc.desktop
-update-desktop-database ~/.local/share/applications 2>/dev/null || true
-```
-
-### 3. Hearthstone setup
+## Hearthstone setup
 
 - Battlenet/Hearthstone under Proton at `~/Games/battlenet` (default Omarchy path).
-- Enable logging: in the Hearthstone install dir (inside the prefix), ensure `log.config` turns on `Power` logging (same as usual BG tracker setups).
+- Enable `Power` logging in the prefix `log.config` (same as usual BG trackers).
 - Run the game **windowed or borderless**, not exclusive fullscreen.
-
-### 4. Launch with the game
-
-```bash
-# Live overlay: discovers Power.log, fetches current pool from HearthstoneJSON, tails events
-bgc
-
-# Offline smoke test (fixture cards + fake combat telemetry, no game required)
-bgc --demo
-```
+- Optional Hyprland notes: [`contrib/hyprland.lua`](contrib/hyprland.lua).
 
 Data: `~/.local/share/battlegrounds-companion/` (`bgc.sqlite`, `cards_cache.json`).
 
 If `Power.log` is missing, the overlay still opens with status `waiting for logs`.
 
-### 5. Hyprland
-
-See [`contrib/hyprland.lua`](contrib/hyprland.lua) for suggested layer rules. Prefer not stealing focus from the game.
-
-### Dev rebuild loop
+## Dev rebuild
 
 ```bash
-cd /path/to/battlegrounds-companion
 cargo run -p bgc-app            # live
 cargo run -p bgc-app -- --demo  # fixture
 cargo test --workspace
 ```
+
+## Publish a new prebuilt (maintainer)
+
+On Omarchy (so the binary matches Arch libs):
+
+```bash
+cargo build --release -p bgc-app
+sha256sum target/release/bgc   # update contrib/aur/PKGBUILD sha256sums[0]
+gh release create v0.1.1 target/release/bgc --title "v0.1.1" --generate-notes
+```
+
+Bump `pkgver` / `sha256sums` in `contrib/aur/PKGBUILD` to match.
 
 ## Workspace crates
 
@@ -80,4 +98,4 @@ cargo test --workspace
 
 ## Not in MVP
 
-Bob's Buddy / rules engine, Postgres, Duos UI, art CDN, Flatpak packaging.
+Bob's Buddy / rules engine, Postgres, Duos UI, art CDN, Flatpak, official AUR submit.
