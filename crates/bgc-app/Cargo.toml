@@ -1,0 +1,18 @@
+[package]
+name = "bgc-app"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Battlegrounds companion binary: wires plugins and app loop"
+
+[[bin]]
+name = "bgc"
+path = "src/main.rs"
+
+[dependencies]
+bgc-storage = { workspace = true }
+bgc-catalog = { workspace = true }
+bgc-logs = { workspace = true }
+bgc-state = { workspace = true }
+bgc-telemetry = { workspace = true }
+bgc-overlay = { workspace = true }

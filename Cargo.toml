@@ -1,0 +1,33 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/bgc-storage",
+    "crates/bgc-catalog",
+    "crates/bgc-logs",
+    "crates/bgc-state",
+    "crates/bgc-telemetry",
+    "crates/bgc-overlay",
+    "crates/bgc-app",
+]
+default-members = ["crates/bgc-app"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+
+[workspace.dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+rusqlite = { version = "0.32", features = ["bundled"] }
+ureq = "2"
+directories = "5"
+gtk4 = "0.11"
+glib = "0.22"
+gtk4-layer-shell = { version = "0.8", features = ["v1_3"] }
+bgc-storage = { path = "crates/bgc-storage" }
+bgc-catalog = { path = "crates/bgc-catalog" }
+bgc-logs = { path = "crates/bgc-logs" }
+bgc-state = { path = "crates/bgc-state" }
+bgc-telemetry = { path = "crates/bgc-telemetry" }
+bgc-overlay = { path = "crates/bgc-overlay" }

@@ -1,0 +1,10 @@
+[package]
+name = "bgc-storage"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "SQLite open/migrate and XDG data paths"
+
+[dependencies]
+directories = { workspace = true }
+rusqlite = { workspace = true }

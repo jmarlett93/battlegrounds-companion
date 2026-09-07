@@ -1,0 +1,12 @@
+[package]
+name = "bgc-overlay"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "GTK4 layer-shell overlay: tiers, cards, races, opponent board"
+
+[dependencies]
+gtk4 = { workspace = true }
+gtk4-layer-shell = { workspace = true }
+bgc-catalog = { workspace = true }
+bgc-state = { workspace = true }
