@@ -1,0 +1,11 @@
+[package]
+name = "bgc-catalog"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Fetch/cache HearthstoneJSON cards; query by BG tier"
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+ureq = { workspace = true }

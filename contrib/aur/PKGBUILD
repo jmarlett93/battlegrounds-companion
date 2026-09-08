@@ -1,0 +1,27 @@
+# Maintainer: jmarlett93
+# Local / future AUR package: installs prebuilt bgc from GitHub Releases.
+# Usage from a clone:  cd contrib/aur && makepkg -si
+
+pkgname=battlegrounds-companion-bin
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Native Hearthstone Battlegrounds overlay for Omarchy/Hyprland"
+arch=('x86_64')
+url="https://github.com/jmarlett93/battlegrounds-companion"
+license=('MIT')
+depends=('gtk4' 'gtk4-layer-shell')
+provides=('battlegrounds-companion')
+conflicts=('battlegrounds-companion')
+source=(
+  "bgc-${pkgver}::https://github.com/jmarlett93/battlegrounds-companion/releases/download/v${pkgver}/bgc"
+  "bgc.desktop"
+)
+sha256sums=(
+  '528f0e266698ec1d1158f98b1da96f0c790cad4e99c764c4f728b8caf6e259fa'
+  'SKIP'
+)
+
+package() {
+  install -Dm755 "${srcdir}/bgc-${pkgver}" "${pkgdir}/usr/bin/bgc"
+  install -Dm644 "${srcdir}/bgc.desktop" "${pkgdir}/usr/share/applications/bgc.desktop"
+}

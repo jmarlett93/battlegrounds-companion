@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Battlegrounds Companion
+Comment=Hearthstone Battlegrounds overlay for Omarchy
+Exec=bgc
+Icon=applications-games
+Terminal=false
+Categories=Game;
+StartupNotify=false

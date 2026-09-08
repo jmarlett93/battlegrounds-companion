@@ -1,0 +1,9 @@
+[package]
+name = "bgc-state"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Pure functional BG game state machine"
+
+[dependencies]
+serde = { workspace = true }
